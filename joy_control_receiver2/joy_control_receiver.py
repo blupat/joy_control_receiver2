@@ -10,6 +10,7 @@
 
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import QoSPresetProfiles
 from sensor_msgs.msg import Joy
 from pimouse_msgs.srv import PiMouseCmd
 
@@ -22,7 +23,8 @@ class JoyControlReceiver(Node):
 
     def __init__(self):
         super().__init__('joy_control_receiver')
-        self._joy_subscriber = self.create_subscription(Joy, '/joy', self.receive_joy_callback, 1)
+        self._joy_subscriber = self.create_subscription(
+            Joy, '/joy', self.receive_joy_callback, QoSPresetProfiles.SENSOR_DATA.value)
         self._srv_pimouse_cmd = self.create_client(PiMouseCmd, 'pimouse_cmd')
         self._is_on = False
         self._is_run = False
